@@ -1,0 +1,255 @@
+{
+  "version": "1.0.0",
+  "activeDeviceId": "device_mx_master_3s_desk",
+  "engineSettings": {
+    "pollingRateHz": 1000,
+    "globalThresholdPx": 35,
+    "hudEnabled": true,
+    "hudDurationMs": 900,
+    "hudTheme": "neon",
+    "audioFeedbackEnabled": true,
+    "suppressNativeHardwareEvent": true,
+    "targetPlatform": "windows",
+    "startWithWindows": true,
+    "portableMode": true,
+    "startMinimizedToTray": true,
+    "aggressiveRamTrimming": true,
+    "closeToTray": true
+  },
+  "devices": {
+    "device_mx_master_3s_desk": {
+      "id": "device_mx_master_3s_desk",
+      "name": "Logitech MX Master 3S (Office Desk)",
+      "hardwareModel": "Logitech MX Master 3S",
+      "vendorId": "0x046D",
+      "productId": "0xB023",
+      "connectionType": "logi_bolt",
+      "activeProfileId": "profile_global",
+      "profiles": [
+        {
+          "id": "profile_global",
+          "name": "Global (Default OS)",
+          "processNames": ["*"],
+          "icon": "Globe",
+          "color": "#9ca3af",
+          "description": "Primary desktop configuration for MX Master 3S",
+          "buttons": {
+            "thumb_gesture": {
+              "buttonId": "thumb_gesture",
+              "mode": "gesture",
+              "thresholdPx": 35,
+              "showHUD": true,
+              "gestures": {
+                "click": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_task_view",
+                    "category": "os_navigation",
+                    "name": "Task View / Mission Control",
+                    "systemActionType": "task_view"
+                  }
+                },
+                "up": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_maximize",
+                    "category": "os_navigation",
+                    "name": "Maximize Window",
+                    "keyCombo": {
+                      "meta": true,
+                      "key": "ArrowUp",
+                      "displayName": "Win + Up"
+                    }
+                  }
+                },
+                "down": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_show_desktop",
+                    "category": "os_navigation",
+                    "name": "Show Desktop",
+                    "systemActionType": "show_desktop"
+                  }
+                },
+                "left": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_desktop_left",
+                    "category": "os_navigation",
+                    "name": "Previous Desktop",
+                    "systemActionType": "desktop_left"
+                  }
+                },
+                "right": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_desktop_right",
+                    "category": "os_navigation",
+                    "name": "Next Desktop",
+                    "systemActionType": "desktop_right"
+                  }
+                }
+              }
+            },
+            "mode_shift": {
+              "buttonId": "mode_shift",
+              "mode": "standard",
+              "thresholdPx": 35,
+              "showHUD": false,
+              "directAction": {
+                "id": "act_middle_click",
+                "category": "mouse_action",
+                "name": "Middle Click",
+                "mouseActionType": "middle_click"
+              },
+              "gestures": {
+                "click": { "enabled": true, "action": { "id": "act_none", "category": "none", "name": "None" } },
+                "up": { "enabled": false, "action": { "id": "act_none", "category": "none", "name": "None" } },
+                "down": { "enabled": false, "action": { "id": "act_none", "category": "none", "name": "None" } },
+                "left": { "enabled": false, "action": { "id": "act_none", "category": "none", "name": "None" } },
+                "right": { "enabled": false, "action": { "id": "act_none", "category": "none", "name": "None" } }
+              }
+            }
+          }
+        },
+        {
+          "id": "profile_chrome",
+          "name": "Google Chrome",
+          "processNames": ["chrome.exe", "google-chrome"],
+          "icon": "Chrome",
+          "color": "#9ca3af",
+          "description": "Browser tab switching and navigation",
+          "buttons": {
+            "thumb_gesture": {
+              "buttonId": "thumb_gesture",
+              "mode": "gesture",
+              "thresholdPx": 32,
+              "showHUD": true,
+              "gestures": {
+                "click": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_new_tab",
+                    "category": "keyboard_shortcut",
+                    "name": "New Tab",
+                    "keyCombo": { "ctrl": true, "key": "t", "displayName": "Ctrl + T" }
+                  }
+                },
+                "up": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_reopen_tab",
+                    "category": "keyboard_shortcut",
+                    "name": "Reopen Closed Tab",
+                    "keyCombo": { "ctrl": true, "shift": true, "key": "t", "displayName": "Ctrl + Shift + T" }
+                  }
+                },
+                "down": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_close_tab",
+                    "category": "keyboard_shortcut",
+                    "name": "Close Tab",
+                    "keyCombo": { "ctrl": true, "key": "w", "displayName": "Ctrl + W" }
+                  }
+                },
+                "left": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_prev_tab",
+                    "category": "keyboard_shortcut",
+                    "name": "Previous Tab",
+                    "keyCombo": { "ctrl": true, "shift": true, "key": "Tab", "displayName": "Ctrl + Shift + Tab" }
+                  }
+                },
+                "right": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_next_tab",
+                    "category": "keyboard_shortcut",
+                    "name": "Next Tab",
+                    "keyCombo": { "ctrl": true, "key": "Tab", "displayName": "Ctrl + Tab" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "device_mx_master_2s_travel": {
+      "id": "device_mx_master_2s_travel",
+      "name": "Logitech MX Master 2S (Laptop Travel)",
+      "hardwareModel": "Logitech MX Master 2S",
+      "vendorId": "0x046D",
+      "productId": "0xB019",
+      "connectionType": "bluetooth",
+      "activeProfileId": "profile_global",
+      "profiles": [
+        {
+          "id": "profile_global",
+          "name": "Global (Default OS)",
+          "processNames": ["*"],
+          "icon": "Globe",
+          "color": "#9ca3af",
+          "description": "Travel laptop profile for MX Master 2S",
+          "buttons": {
+            "thumb_gesture": {
+              "buttonId": "thumb_gesture",
+              "mode": "gesture",
+              "thresholdPx": 38,
+              "showHUD": true,
+              "gestures": {
+                "click": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_task_view",
+                    "category": "os_navigation",
+                    "name": "Task View",
+                    "systemActionType": "task_view"
+                  }
+                },
+                "up": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_maximize",
+                    "category": "os_navigation",
+                    "name": "Maximize Window",
+                    "keyCombo": { "meta": true, "key": "ArrowUp", "displayName": "Win + Up" }
+                  }
+                },
+                "down": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_show_desktop",
+                    "category": "os_navigation",
+                    "name": "Show Desktop",
+                    "systemActionType": "show_desktop"
+                  }
+                },
+                "left": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_desktop_left",
+                    "category": "os_navigation",
+                    "name": "Previous Desktop",
+                    "systemActionType": "desktop_left"
+                  }
+                },
+                "right": {
+                  "enabled": true,
+                  "action": {
+                    "id": "act_desktop_right",
+                    "category": "os_navigation",
+                    "name": "Next Desktop",
+                    "systemActionType": "desktop_right"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

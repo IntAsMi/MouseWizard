@@ -1,0 +1,6 @@
+{
+  "name": "MasterGesture - MX Master Custom Gesture Engine",
+  "description": "High-performance gesture control engine and profile orchestrator for Logitech MX Master series mice. Low-latency input interception, vector drag analysis, macro execution, and native daemon architecture.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,11 @@
+# MasterGesture Lightweight Dependencies
+# Note: Base engine runs on Python standard library alone (ctypes, winreg, tkinter, json)
+# Zero external packages are mandatory to run.
+
+# Optional packages for Cython native C compilation:
+cython>=3.0.0
+setuptools>=65.0.0
+
+# Optional packages for system tray and image rendering:
+pystray>=0.19.5
+Pillow>=9.0.0
