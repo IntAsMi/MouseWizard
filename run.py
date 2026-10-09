@@ -89,6 +89,123 @@ def check_status():
     except Exception:
         print("[STATUS] Could not verify process.")
 
+def start_local_web_studio(port=3000):
+    import http.server
+    import socketserver
+    import webbrowser
+
+    web_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist")
+    if not os.path.exists(web_dir) or not os.path.exists(os.path.join(web_dir, "index.html")):
+        print(f"[WEB ERROR] Frontend build directory not found at {web_dir}.")
+        print("[WEB] Please run 'npm run build' once or use the desktop GUI.")
+        return
+
+    class QuietHandler(http.server.SimpleHTTPRequestHandler):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, directory=web_dir, **kwargs)
+        def log_message(self, format, *args):
+            pass  # Suppress routine HTTP request logging
+
+    try:
+        # Allow immediate reuse of the address
+        socketserver.TCPServer.allow_reuse_address = True
+        with socketserver.TCPServer(("", port), QuietHandler) as httpd:
+            url = f"http://localhost:{port}"
+            print("=" * 70)
+            print("  MASTERGESTURE // LOCAL WEB STUDIO SERVER ACTIVE")
+            print(f"  Access URL: {url}")
+            print("  Opening browser to interactive Mouse Configurator...")
+            print("  Press Ctrl+C to terminate the local web server.")
+            print("=" * 70)
+            try:
+                webbrowser.open(url)
+            except Exception:
+                pass
+            httpd.serve_forever()
+    except Exception as e:
+        print(f"[WEB ERROR] Could not bind web server on port {port}: {e}")
+
+def run_cli_wizard(config_mgr):
+    print("=" * 70)
+    print("  MASTERGESTURE // INTERACTIVE TERMINAL CONFIGURATION WIZARD")
+    print("=" * 70)
+
+    devices = config_mgr.get_devices()
+    dev_keys = list(devices.keys())
+    if not dev_keys:
+        print("[ERROR] No devices found in configuration.")
+        return
+
+    print("\nSelect Connected Mouse Device:")
+    for i, d in enumerate(dev_keys, 1):
+        name = devices[d].get("name", d)
+        print(f"  [{i}] {name} ({d})")
+    
+    try:
+        choice = input(f"Choose mouse [1-{len(dev_keys)}] (default: 1): ").strip()
+        dev_idx = int(choice) - 1 if choice else 0
+        target_dev = dev_keys[max(0, min(dev_idx, len(dev_keys) - 1))]
+    except (ValueError, KeyboardInterrupt):
+        target_dev = dev_keys[0]
+
+    dev_cfg = config_mgr.get_device_config(target_dev)
+    profiles = dev_cfg.get("profiles", [])
+    active_prof_id = dev_cfg.get("activeProfileId", "profile_global")
+
+    print(f"\nTarget Device: {target_dev}")
+    print(f"Active Profile: {active_prof_id}")
+
+    buttons = [
+        ("thumb_gesture", "Thumb Gesture Button (Rest Pad)"),
+        ("mode_shift", "Mode Shift Button (Top Middle)"),
+        ("middle_click", "Middle Click (Scroll Wheel)"),
+        ("forward", "Forward Button (X2 Side Front)"),
+        ("back", "Back Button (X1 Side Rear)")
+    ]
+
+    print("\nSelect Button to Configure:")
+    for i, (b_id, b_label) in enumerate(buttons, 1):
+        print(f"  [{i}] {b_label}")
+    
+    try:
+        choice = input(f"Choose button [1-{len(buttons)}] (default: 1): ").strip()
+        btn_idx = int(choice) - 1 if choice else 0
+        target_btn = buttons[max(0, min(btn_idx, len(buttons) - 1))][0]
+    except (ValueError, KeyboardInterrupt):
+        target_btn = "thumb_gesture"
+
+    print(f"\nConfiguring '{target_btn}' on '{target_dev}':")
+    presets = [
+        ("Task View / Mission Control", {"id": "act_task_view", "systemActionType": "task_view"}),
+        ("Show Desktop", {"id": "act_show_desktop", "systemActionType": "show_desktop"}),
+        ("Previous Virtual Desktop", {"id": "act_desktop_left", "systemActionType": "desktop_left"}),
+        ("Next Virtual Desktop", {"id": "act_desktop_right", "systemActionType": "desktop_right"}),
+        ("Maximize Window", {"id": "act_maximize", "keyCombo": {"meta": True, "key": "ArrowUp"}}),
+        ("Minimize Window", {"id": "act_minimize", "keyCombo": {"meta": True, "key": "ArrowDown"}}),
+        ("Switch Applications (Alt+Tab)", {"id": "act_app_switcher", "systemActionType": "app_switcher"}),
+        ("Play / Pause Media", {"id": "act_media_play", "systemActionType": "media_play_pause"}),
+        ("Volume Up", {"id": "act_vol_up", "systemActionType": "volume_up"}),
+        ("Volume Down", {"id": "act_vol_down", "systemActionType": "volume_down"})
+    ]
+
+    for d in ["click", "up", "down", "left", "right"]:
+        print(f"\nAssign action for: {d.upper()}")
+        for i, (p_name, _) in enumerate(presets, 1):
+            print(f"  [{i}] {p_name}")
+        try:
+            p_choice = input(f"Select preset for {d.upper()} (Enter to keep current): ").strip()
+            if p_choice:
+                idx = int(p_choice) - 1
+                if 0 <= idx < len(presets):
+                    chosen_action = presets[idx][1]
+                    chosen_action["name"] = presets[idx][0]
+                    config_mgr.update_gesture_direction(target_dev, active_prof_id, target_btn, d, chosen_action)
+                    print(f"  -> Set {d.upper()} to: {presets[idx][0]}")
+        except Exception as e:
+            print(f"  Skipped {d}: {e}")
+
+    print("\n✓ Configuration updated successfully in config.json!")
+
 def main():
     parser = argparse.ArgumentParser(
         description="MasterGesture - Low-Latency Gesture Engine for Logitech MX Master Mice",
@@ -96,6 +213,8 @@ def main():
     )
     parser.add_argument("--daemon", action="store_true", help="Run as silent background daemon (< 15MB RAM)")
     parser.add_argument("--gui", action="store_true", help="Launch utilitarian configuration GUI")
+    parser.add_argument("--web", action="store_true", help="Launch local browser-based Web Studio interface")
+    parser.add_argument("--cli", action="store_true", help="Interactive terminal configuration wizard for mouse & gestures")
     parser.add_argument("--stop", action="store_true", help="Stop any active background MasterGesture process")
     parser.add_argument("--status", action="store_true", help="Check process status and auto-start configuration")
     parser.add_argument("--config", default="config.json", help="Path to JSON configuration file (default: config.json)")
@@ -141,6 +260,17 @@ def main():
 
     # 5. Load multi-mouse configuration
     config_mgr = ConfigManager(args.config)
+
+    # 6. Web Studio command
+    if args.web:
+        start_local_web_studio()
+        return
+
+    # 7. Interactive Terminal CLI Wizard
+    if args.cli:
+        run_cli_wizard(config_mgr)
+        return
+
     engine = MasterGestureEngine(config_mgr, target_device=args.device)
 
     record_pid()

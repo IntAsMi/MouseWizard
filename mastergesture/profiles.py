@@ -66,6 +66,46 @@ class ConfigManager:
                 return p
         return profiles[0] if profiles else {}
 
+    def get_button_config(self, device_id, profile_id, button_id):
+        dev_cfg = self.get_device_config(device_id)
+        profiles = dev_cfg.get("profiles", [])
+        for p in profiles:
+            if p.get("id") == profile_id:
+                return p.get("buttons", {}).get(button_id, {})
+        return {}
+
+    def save_button_config(self, device_id, profile_id, button_id, button_dict):
+        dev_cfg = self.get_device_config(device_id)
+        profiles = dev_cfg.get("profiles", [])
+        for p in profiles:
+            if p.get("id") == profile_id:
+                if "buttons" not in p:
+                    p["buttons"] = {}
+                p["buttons"][button_id] = button_dict
+                self.save_config()
+                return True
+        return False
+
+    def update_gesture_direction(self, device_id, profile_id, button_id, direction, action_dict, threshold_px=None):
+        button_cfg = self.get_button_config(device_id, profile_id, button_id)
+        if not button_cfg:
+            button_cfg = {
+                "buttonId": button_id,
+                "mode": "gesture",
+                "thresholdPx": threshold_px or 35,
+                "showHUD": True,
+                "gestures": {}
+            }
+        if threshold_px is not None:
+            button_cfg["thresholdPx"] = threshold_px
+        if "gestures" not in button_cfg:
+            button_cfg["gestures"] = {}
+        button_cfg["gestures"][direction] = {
+            "enabled": True,
+            "action": action_dict
+        }
+        return self.save_button_config(device_id, profile_id, button_id, button_cfg)
+
     def update_device_json(self, device_id, raw_json_str):
         """Allows direct copy-pasting of JSON configuration for a specific mouse."""
         parsed = json.loads(raw_json_str)

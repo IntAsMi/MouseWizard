@@ -25,11 +25,11 @@ Enterprise workstations and corporate laptops routinely enforce strict Endpoint 
 
 MasterGesture runs on standard Python 3 (3.8+) using **built-in standard libraries alone**. No heavy dependencies or compilers are mandatory to run.
 
-### 1. Start Engine with Utilitarian GUI (Default)
+### 1. Start Engine with Interactive Mouse Configurator UI (Default)
 ```bash
 python run.py
 ```
-*Starts the background low-latency hook and opens the utilitarian matte black configuration GUI.*
+*Starts the background low-latency hook and immediately opens the **interactive Mouse & Gesture Setup GUI**. Directly configure buttons, 5-way gesture directions, deadzone sliders, test in the real-time arena, or edit raw JSON without ever needing to touch terminal scripts.*
 
 ### 2. Silent Headless Background Daemon (< 15 MB RAM)
 ```bash
@@ -37,17 +37,29 @@ python run.py --daemon
 ```
 *Runs completely silently in the background with zero GUI overhead, intercepting MX Master thumb rest gestures.*
 
-### 3. Launch Configuration GUI Only
+### 3. Launch Local Browser-Based Web Studio
+```bash
+python run.py --web
+```
+*Starts a lightweight local HTTP server and automatically opens the full visual Web Studio in your default browser.*
+
+### 4. Interactive Terminal CLI Wizard
+```bash
+python run.py --cli
+```
+*Step-by-step interactive command-line wizard to configure buttons and gestures on headless machines or over SSH.*
+
+### 5. Launch Configuration GUI Only
 ```bash
 python run.py --gui
 ```
 
-### 4. Stop Background Engine Cleanly (No Task Manager Needed)
+### 6. Stop Background Engine Cleanly (No Task Manager Needed)
 ```bash
 python run.py --stop
 ```
 
-### 5. Check Engine & Auto-Start Status
+### 7. Check Engine & Auto-Start Status
 ```bash
 python run.py --status
 ```
